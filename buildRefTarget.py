@@ -12,6 +12,11 @@ if __name__ == '__main__':
             content += line.strip().replace('\n', '')
     for target in metadata:
         sub_content = content[target['start'] - 1: target['end']]
-        output['gene'].append({'name': target['name'], 'seq': sub_content})
+        output['gene'].append({
+            'name': target['name'],
+            'start': target['start'],
+            'end': target['end'],
+            'seq': sub_content
+        })
     with open('data/refTargetSeq.json', 'w') as f:
-        json.dump(output, f)
+        f.write(json.dumps(output, indent=1))
