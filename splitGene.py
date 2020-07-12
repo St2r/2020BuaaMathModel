@@ -8,18 +8,18 @@ ErrorFile = set()
 def splitToJson(inputFile: str, outputFile: str):
     import json
 
-    def judge(seq1: str, seq2: str) -> bool:
-        level = 10
+    def judge(seq1: str, seq2: str, start: int, end: int) -> bool:
+        if end - start < 50:
+            return False
         count = 0
-        try:
-            for i in range(level):
-                if seq1[i] != seq2[i]:
-                    count += 1
-            return count < 0.4 * level
-        except IndexError:
-            print('Index Error in ' + inputFile)
-            ErrorFile.add(inputFile)
-            return True
+
+        for i in range(25):
+            if seq1[i] != seq2[start + i]:
+                count += 1
+        for i in range(25):
+            if seq1[-i] != seq2[end - i]:
+                count += 1
+        return count < 10
 
     content = ''
     output = {
@@ -29,35 +29,58 @@ def splitToJson(inputFile: str, outputFile: str):
         for line in f.readlines():
             content += line.strip().replace('\n', '')
     with open('data/refTargetSeq.json') as f:
+        t_start = -1
         for target in json.load(f)['gene']:
-            t = content[target['start'] - 10: target['end'] + 10]
-            t_start = t.find('ATG')
-            while not judge(target['seq'], t[t_start: t_start + 10]):
-                t_start = t.find('ATG', t_start + 1)
-            t_end = t_start + 3
-            while not end.__contains__(t[t_end - 3: t_end]):
-                if (t_end > t_start + len(target['seq']) + 10):
-                    break
-                t_end += 3
+
+            while True:
+                t_start = content.find('ATG', t_start + 1)
+
+                if t_start == -1:
+                    ErrorFile.add(inputFile)
+                    return;
+
+                t_end = t_start + 3
+                while content[t_end - 3: t_end] not in end:
+                    if t_end > len(content):
+                        break
+                    t_end += 3
+                if judge(target['seq'], content, t_start, t_end):
+                    break;
 
             output['gene'].append({
                 'name': target['name'],
-                'seq': t[t_start: t_end]
+                'start': t_start,
+                'length': t_end - t_start,
+                'seq': content[t_start: t_end]
             })
+
     with open(outputFile, 'w') as f:
         f.write(json.dumps(output, indent=1))
 
 
 if __name__ == '__main__':
     import os
+    import json
 
     inputFolder = '2020-June'
     outputFolder = inputFolder + '-Gene'
     if not os.path.isdir(os.path.join('data', outputFolder)):
         os.mkdir(os.path.join('data', outputFolder))
 
+    count = 0
     for file in os.listdir(os.path.join('data', inputFolder)):
         inputFile = os.path.join('data', inputFolder, file)
         outputFile = os.path.join('data', outputFolder, file.replace('.txt', '.json'))
-        print(inputFile + '_' + outputFile)
+        count += 1
+        print(str(count) + '_' + inputFile)
         splitToJson(inputFile, outputFile)
+
+    output = {
+        'error': list()
+    }
+    for e in ErrorFile:
+        output['error'].append({
+            'filename': e
+        })
+    with open(os.path.join(outputFolder, '_error_file.json')) as f:
+        f.write(json.dumps(output, indent=1))

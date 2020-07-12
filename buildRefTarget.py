@@ -16,6 +16,7 @@ if __name__ == '__main__':
             'name': target['name'],
             'start': target['start'],
             'end': target['end'],
+            'length': target['end'] - target['start'] + 1,
             'seq': sub_content
         })
     with open('data/refTargetSeq.json', 'w') as f:

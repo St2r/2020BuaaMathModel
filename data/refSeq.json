@@ -1,8 +1,13 @@
 {
   "targets": [
     {
-      "name": "ORF1ab",
+      "name": "ORF1a",
       "start": 266,
+      "end": 13483
+    },
+    {
+      "name": "ORF1b",
+      "start": 13768,
       "end": 21555
     },
     {
