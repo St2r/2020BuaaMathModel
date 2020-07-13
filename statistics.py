@@ -13,6 +13,8 @@ def statistic(target: tuple) -> dict:
                 for mutation in content[gene]:
                     if mutation['type'] == 'replace':
                         key = '%d_%s_%s' % (mutation['position'], mutation['source'], mutation['target'])
+                        if mutation['target'] not in {'A', 'T', 'C', 'G'}:
+                            continue
                         if key not in ans:
                             ans[key] = 0
                         ans[key] += 1
@@ -79,4 +81,4 @@ if __name__ == '__main__':
                 seq = g['seq']
                 break
 
-    c = toCsv(start, seq, s, output='output.csv')
+    c = toCsv(start, seq, s, output=os.path.join('data', 'mutation', 'mutation_%s.csv' % targetGene))

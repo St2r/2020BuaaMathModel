@@ -1,0 +1,3 @@
+[submodule "graphlan"]
+	path = graphlan
+	url = https://github.com/biobakery/graphlan.git

@@ -17,7 +17,8 @@ def minDistance(word1, word2):
             elif word1[i - 1] == word2[j - 1]:
                 output[i][j] = output[i - 1][j - 1]
             else:
-                output[i][j] = min(output[i - 1][j - 1] + 1, output[i - 1][j] + 1, output[i][j - 1] + 1)
+                # 增删和替换代价比为10
+                output[i][j] = min(output[i - 1][j - 1] + 1, output[i - 1][j] + 10, output[i][j - 1] + 10)
     return output
 
 

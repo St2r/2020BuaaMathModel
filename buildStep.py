@@ -3,7 +3,7 @@ import os
 import json
 
 targetFolder = '2020-March-Gene'
-targetGene = '7a'
+targetGene = 'M'
 
 if __name__ == '__main__':
     with open('data/refTargetSeq.json', 'r') as f:
@@ -27,7 +27,7 @@ if __name__ == '__main__':
             # if len(output[file]) != 0:
             #     i = 1
         count += 1
-        if count % 100 == 0:
+        if count % 50 == 0:
             print(count)
 
     with open(os.path.join('data', targetFolder, '_mutation_%s.json' % targetGene), 'w') as f:
