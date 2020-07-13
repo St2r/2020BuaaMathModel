@@ -2,8 +2,8 @@ import minDistance
 import os
 import json
 
-targetFolder = '2020-June-Gene'
-targetGene = 'E'
+targetFolder = '2020-March-Gene'
+targetGene = '7a'
 
 if __name__ == '__main__':
     with open('data/refTargetSeq.json', 'r') as f:

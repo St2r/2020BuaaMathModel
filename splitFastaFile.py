@@ -2,7 +2,7 @@ import os
 from typing import TextIO
 
 if __name__ == '__main__':
-    fileName = '2020-June'
+    fileName = '2020-March'
     if not os.path.isdir(os.path.join('data', fileName)):
         os.mkdir(os.path.join('data', fileName))
     with open('data/%s.fasta' % fileName, 'r') as f:
